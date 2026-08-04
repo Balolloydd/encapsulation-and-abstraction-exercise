@@ -23,7 +23,10 @@ public abstract class Vehicle {
         return ratePerDay;
     }
 
-    public boolean isAvailable() {
+    public boolean getStatus() {
         return isAvailable;
     }
+
+    public abstract double rentalCost(int numberOfDays);
+    public abstract String getVehicleType();
 }

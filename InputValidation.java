@@ -34,7 +34,7 @@ public class InputValidation {
                 continue;
             }
 
-            for (Vehicle vehicle : Main.getVehiclesList()) {
+            for (Vehicle vehicle : RentalSystem.getVehiclesList().values()) {
                 if (vehicle.getPlateNumber().equalsIgnoreCase(input)) {
                     System.out.println("Invalid Input! Plate number already exists.");
                     isValid = false;

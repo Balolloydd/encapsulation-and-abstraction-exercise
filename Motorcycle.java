@@ -9,4 +9,14 @@ public class Motorcycle extends Vehicle {
     public int getEngineDisplacement() {
         return engineDisplacement;
     }
+
+    @Override
+    public double rentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays;
+    }
+
+    @Override
+    public String getVehicleType() {
+        return "Motorcycle";
+    }
 }

@@ -9,4 +9,14 @@ public class Car extends Vehicle {
     public int getNumSeats() {
         return numSeats;
     }
+
+    @Override
+    public double rentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays;
+    }
+
+    @Override
+    public String getVehicleType() {
+        return "Car";
+    }
 }

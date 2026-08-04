@@ -9,4 +9,14 @@ public class Van extends Vehicle {
     public int getCargoCapacity() {
         return cargoCapacity;
     }
+
+    @Override
+    public double rentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays + 500;
+    }
+
+    @Override
+    public String getVehicleType() {
+        return "Van";
+    }   
 }
