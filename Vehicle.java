@@ -11,6 +11,10 @@ public abstract class Vehicle {
         this.isAvailable = true;
     }
 
+    public void setStatus(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     public String getPlateNumber() {
         return plateNumber;
     }
