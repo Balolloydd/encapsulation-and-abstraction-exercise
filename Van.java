@@ -6,13 +6,14 @@ public class Van extends Vehicle {
         this.cargoCapacity = cargoCapacity;
     }
 
-    public int getCargoCapacity() {
-        return cargoCapacity;
+    @Override
+    public double getRentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays + 500;
     }
 
     @Override
-    public double rentalCost(int numberOfDays) {
-        return getRatePerDay() * numberOfDays + 500;
+    public String getDetails() {
+        return String.format("%d kg", cargoCapacity);
     }
 
     @Override

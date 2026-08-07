@@ -6,13 +6,14 @@ public class Motorcycle extends Vehicle {
         this.engineDisplacement = engineDisplacement;
     }
 
-    public int getEngineDisplacement() {
-        return engineDisplacement;
+    @Override
+    public double getRentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays;
     }
 
     @Override
-    public double rentalCost(int numberOfDays) {
-        return getRatePerDay() * numberOfDays;
+    public String getDetails() {
+        return String.format("%d cc", engineDisplacement);
     }
 
     @Override

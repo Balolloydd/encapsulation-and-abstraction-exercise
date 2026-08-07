@@ -31,6 +31,7 @@ public abstract class Vehicle {
         return isAvailable;
     }
 
-    public abstract double rentalCost(int numberOfDays);
+    public abstract double getRentalCost(int numberOfDays);
+    public abstract String getDetails();
     public abstract VehicleType getVehicleType();
 }

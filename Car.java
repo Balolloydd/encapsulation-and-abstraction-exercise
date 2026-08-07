@@ -6,13 +6,14 @@ public class Car extends Vehicle {
         this.numSeats = numSeats;
     }
 
-    public int getNumSeats() {
-        return numSeats;
+    @Override
+    public double getRentalCost(int numberOfDays) {
+        return getRatePerDay() * numberOfDays;
     }
 
     @Override
-    public double rentalCost(int numberOfDays) {
-        return getRatePerDay() * numberOfDays;
+    public String getDetails() {
+        return String.format("%d Seats", numSeats);
     }
 
     @Override
