@@ -53,7 +53,7 @@ public class UserInterface {
         int[] longestLengths = getLengthLineElements(vehicles);
         int totalLengths = longestLengths[longestLengths.length - 1];
 
-        System.out.println("-".repeat(totalLengths + 31));
+        System.out.println("\n" + "-".repeat(totalLengths + 31));
 
         System.out.print("| PLATE NUMBER" + " ".repeat(longestLengths[0] - 9));
         System.out.print("| TYPE" + " ".repeat(longestLengths[1] - 1));

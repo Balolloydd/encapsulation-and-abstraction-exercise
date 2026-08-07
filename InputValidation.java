@@ -3,6 +3,9 @@ import java.util.HashMap;
 
 public class InputValidation {
     private static Scanner sc = new Scanner(System.in);
+    private static final int MAX_SEATS = 8;
+    private static final int MAX_CARGO = 3000;
+    private static final int MAX_CC = 2500;
 
     public static int inputChoice(String prompt, int min, int max) {
         boolean isValid = false;
@@ -110,12 +113,12 @@ public class InputValidation {
             
             if (!input.matches("^[1-9][0-9]*$")) {
                 UserInterface.printFeedback("Invalid Input! Please enter a valid positive integer.");
-            } else if (vehicleType == VehicleType.CAR && !input.matches("^[1-8]$")) {
-                UserInterface.printFeedback("Invalid Input! Please enter the number of seats ranging from 1 to 8.");
-            } else if (vehicleType == VehicleType.VAN && Integer.parseInt(input) > 5000) {
-                UserInterface.printFeedback("Invalid Input! Please enter a number below 5000");
-            } else if (vehicleType == VehicleType.MOTORCYCLE && Integer.parseInt(input) > 2500) {
-                UserInterface.printFeedback("Invalid Input! Please enter a number below 2500");
+            } else if (vehicleType == VehicleType.CAR && !input.matches(String.format("^[1-%d]$", MAX_SEATS))) {
+                UserInterface.printFeedback(String.format("Invalid Input! Please enter the number of seats ranging from 1 to %d.", MAX_SEATS));
+            } else if (vehicleType == VehicleType.VAN && Integer.parseInt(input) > MAX_CARGO) {
+                UserInterface.printFeedback(String.format("Invalid Input! Please enter a number below %d", MAX_CARGO));
+            } else if (vehicleType == VehicleType.MOTORCYCLE && Integer.parseInt(input) > MAX_CC) {
+                UserInterface.printFeedback(String.format("Invalid Input! Please enter a number below %d", MAX_CC));
             } else {
                 isValid = true;
             }

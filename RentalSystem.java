@@ -41,7 +41,7 @@ public class RentalSystem {
         UserInterface.printTitle("ADD A " + vehicleType);
         String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ", vehicleType, vehicles);
         String model = InputValidation.inputModel("Enter Model: ");
-        double ratePerDay = InputValidation.inputRatePerDay("Enter Base Rate Per Day: ");
+        double ratePerDay = InputValidation.inputRatePerDay("Enter Base Rate Per Day: P");
 
         if (vehicleType == VehicleType.CAR) {
             int numSeats = InputValidation.inputDetails("Enter Number of Seats: ", vehicleType);
