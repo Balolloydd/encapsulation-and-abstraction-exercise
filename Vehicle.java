@@ -11,7 +11,7 @@ public abstract class Vehicle {
         this.isAvailable = true;
     }
 
-    public void setStatus(boolean isAvailable) {
+    public void setAvailability(boolean isAvailable) {
         this.isAvailable = isAvailable;
     }
 
@@ -27,10 +27,10 @@ public abstract class Vehicle {
         return ratePerDay;
     }
 
-    public boolean getStatus() {
+    public boolean getAvailability() {
         return isAvailable;
     }
 
     public abstract double rentalCost(int numberOfDays);
-    public abstract String getVehicleType();
+    public abstract VehicleType getVehicleType();
 }

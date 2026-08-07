@@ -36,27 +36,26 @@ public class UserInterface {
 
         System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
 
-        System.out.printf("| PLATE NUMBER" + " ".repeat(longestLengths[0] - 12));
-        System.out.printf("| TYPE" + " ".repeat(longestLengths[1] - 4));
-        System.out.printf("| MODEL" + " ".repeat(longestLengths[2] - 5));
-        System.out.printf("| BASE RATE" + " ".repeat(longestLengths[3] - 9));
-        System.out.printf("| STATUS" + " ".repeat(longestLengths[4] - 6) + "|\n");
+        System.out.print("| PLATE NUMBER" + " ".repeat(longestLengths[0] - 12));
+        System.out.print("| TYPE" + " ".repeat(longestLengths[1] - 4));
+        System.out.print("| MODEL" + " ".repeat(longestLengths[2] - 5));
+        System.out.print("| BASE RATE" + " ".repeat(longestLengths[3] - 9));
+        System.out.println("| STATUS" + " ".repeat(longestLengths[4] - 6) + "|");
 
         System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
 
         for (Vehicle vehicle : vehicles.values()) {
             String plateNumber = vehicle.getPlateNumber();
-            String vehicleType = vehicle.getVehicleType();
-            
+            VehicleType vehicleType = vehicle.getVehicleType();
             String model = vehicle.getModel();
             double ratePerDay = vehicle.getRatePerDay();
-            String status = (vehicle.getStatus()) ? "AVAILABLE" : "RENTED";
+            String status = (vehicle.getAvailability()) ? "AVAILABLE" : "RENTED";
 
-            System.out.printf("| " + plateNumber + " ".repeat(longestLengths[0] - plateNumber.length() + 3));
-            System.out.printf("| " + vehicleType + " ".repeat(longestLengths[1] - vehicleType.length() + 3));
-            System.out.printf("| " + model + " ".repeat(longestLengths[2] - model.length() + 3));
-            System.out.printf("| " + ratePerDay + " ".repeat(longestLengths[3] - String.valueOf(ratePerDay).length() + 3));
-            System.out.printf("| " + status + " ".repeat(longestLengths[4] - status.length() + 3) + "|\n");
+            System.out.print("| " + plateNumber + " ".repeat(longestLengths[0] - plateNumber.length() + 3));
+            System.out.print("| " + vehicleType + " ".repeat(longestLengths[1] - vehicleType.toString().length() + 3));
+            System.out.print("| " + model + " ".repeat(longestLengths[2] - model.length() + 3));
+            System.out.print("| " + ratePerDay + " ".repeat(longestLengths[3] - String.valueOf(ratePerDay).length() + 3));
+            System.out.println("| " + status + " ".repeat(longestLengths[4] - status.length() + 3) + "|");
         }
 
         System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
@@ -77,9 +76,9 @@ public class UserInterface {
         for (Vehicle vehicle : vehicles.values()) {
             int plateLength = vehicle.getPlateNumber().length();
             int modelLength = vehicle.getModel().length();
-            int typeLength = vehicle.getVehicleType().length();
+            int typeLength = vehicle.getVehicleType().toString().length();
             int rateLength = String.valueOf(vehicle.getRatePerDay()).length();
-            int statusLength = String.valueOf(vehicle.getStatus()).length();
+            int statusLength = (vehicle.getAvailability() ? "AVAILABLE" : "RENTED").length();
 
             if (plateLength > longestPlate) {
                 longestPlate = plateLength;

@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.HashMap;
 
 public class InputValidation {
     private static Scanner sc = new Scanner(System.in);
@@ -11,18 +12,19 @@ public class InputValidation {
             System.out.print(prompt);
             choice = sc.nextLine().trim();
             
-            if (choice.matches(String.format("%d-%d", min, max))) {
+            if (choice.matches(String.format("[%d-%d]", min, max))) {
                 isValid = true;
             } else {
-                System.out.printf("Invalid Input! Please enter a number between %d and %d.\n", min, max);
+                UserInterface.printFeedback("Invalid Input! Please enter a number between " + min + " and " + max + ".");
             }
         }
 
         return Integer.parseInt(choice);
     }
 
-    public static String inputPlateNumber(String prompt) {
-        boolean isValid = true;
+    // mustExist parameter is for seeing if the plate number should be existing already or not
+    public static String inputPlateNumber(String prompt, boolean mustExist, HashMap<String, Vehicle> vehicles) {
+        boolean isValid = false;
         String input = "";
         
         while (!isValid) {
@@ -30,16 +32,16 @@ public class InputValidation {
             input = sc.nextLine().trim();
             
             if (!input.matches("^[A-Z]{3}[0-9]{3,4}$")) {
-                System.out.println("Invalid Input! Please enter a valid plate number.");
+                UserInterface.printFeedback("Invalid Input! Please enter a valid plate number. (ABC1234)");
                 continue;
             }
 
-            for (Vehicle vehicle : RentalSystem.getVehiclesList().values()) {
-                if (vehicle.getPlateNumber().equalsIgnoreCase(input)) {
-                    System.out.println("Invalid Input! Plate number already exists.");
-                    isValid = false;
-                    break;
-                }
+            if (mustExist && !vehicles.containsKey(input)) {
+                UserInterface.printFeedback("Invalid Input! Plate number does not exist.");
+            } else if (!mustExist && vehicles.containsKey(input)) {
+                UserInterface.printFeedback("Invalid Input! Plate number already exists."); 
+            } else {
+                isValid = true;
             }
         }
 
@@ -57,7 +59,7 @@ public class InputValidation {
             if (input != null && !input.isEmpty() && !input.isBlank()) {
                 isValid = true;
             } else {
-                System.out.println("Invalid Input! Please enter a valid model.");
+                UserInterface.printFeedback("Invalid Input! Please enter a valid model.");
             }
         }
 
@@ -72,10 +74,10 @@ public class InputValidation {
             System.out.print(prompt);
             input = sc.nextLine().trim();
             
-            if (input.matches("^[1-9][0-9]*(\\.[0-9]{1,2})?$")) {
+            if (input.matches("^[0-9][0-9]*(\\.[0-9]{1,2})?$")) {
                 isValid = true;
             } else {
-                System.out.println("Invalid Input! Please enter a valid rate per day.");
+                UserInterface.printFeedback("Invalid Input! Please enter a valid rate per day.");
             }
         }
 
@@ -93,7 +95,7 @@ public class InputValidation {
             if (input.matches("^[1-9][0-9]*$")) {
                 isValid = true;
             } else {
-                System.out.println("Invalid Input! Please enter a valid positive integer.");
+                UserInterface.printFeedback("Invalid Input! Please enter a valid positive integer.");
             }
         }
 

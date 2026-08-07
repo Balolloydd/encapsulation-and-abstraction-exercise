@@ -16,7 +16,7 @@ public class Car extends Vehicle {
     }
 
     @Override
-    public String getVehicleType() {
-        return "Car";
+    public VehicleType getVehicleType() {
+        return VehicleType.CAR;
     }
 }

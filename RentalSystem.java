@@ -1,15 +1,10 @@
 import java.util.HashMap;
-import java.util.HashSet;
 
-public class RentalSystem {
+public class RentalSystem { 
     private static final HashMap<String, Vehicle> vehicles = new HashMap<>();
-    private static final HashSet<String> availablePlateNumbers = new HashSet<>();
-    private static final HashSet<String> rentedPlateNumbers = new HashSet<>();
 
     protected static void start() {
         UserInterface.printTitle("VEHICLE RENTAL SYSTEM");
-        
-        HashMap<String, Vehicle> vehicles = getVehiclesList();
         boolean running = true;
         
         while (running) {
@@ -18,7 +13,7 @@ public class RentalSystem {
 
             switch (choice) {
                 case 1: addVehicle(); break;
-                case 2: UserInterface.displayVehicleTable(vehicles); break;
+                case 2: viewAllVehicles(); break;
                 case 3: rentVehicle(); break;
                 case 4: returnVehicle(); break;
                 case 5:
@@ -35,26 +30,25 @@ public class RentalSystem {
     public static void addVehicle() {
         UserInterface.vehicleTypes();
         int choice = InputValidation.inputChoice("Enter your choice: ", 1, 3);
-        String vehicleType = "";
+        
+        VehicleType vehicleType = switch (choice) {
+            case 1 -> VehicleType.CAR;
+            case 2 -> VehicleType.VAN;
+            case 3 -> VehicleType.MOTORCYCLE;
+            default -> null; // This case should never happen due to input validation
+        };
 
-        switch (choice) {
-            case 1: vehicleType = "Car"; break;
-            case 2: vehicleType = "Van"; break;
-            case 3: vehicleType = "Motorcycle"; break;
-            default: UserInterface.printFeedback("Invalid Input! Please try again."); return;
-        }
-
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ");
+        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ", false, vehicles);
         String model = InputValidation.inputModel("Enter Model: ");
         double ratePerDay = InputValidation.inputRatePerDay("Enter Base Rate Per Day: ");
 
-        if (vehicleType.equalsIgnoreCase("Car")) {
+        if (vehicleType == VehicleType.CAR) {
             int numSeats = InputValidation.inputPositiveInteger("Enter Number of Seats: ");
             vehicles.put(plateNumber, new Car(plateNumber, model, ratePerDay, numSeats));
-        } else if (vehicleType.equalsIgnoreCase("Van")) {
+        } else if (vehicleType == VehicleType.VAN) {
             int cargoCapacity = InputValidation.inputPositiveInteger("Enter Cargo Capacity: ");
             vehicles.put(plateNumber, new Van(plateNumber, model, ratePerDay, cargoCapacity));
-        } else if (vehicleType.equalsIgnoreCase("Motorcycle")) {
+        } else if (vehicleType == VehicleType.MOTORCYCLE) {
             int engineDisplacement = InputValidation.inputPositiveInteger("Enter Engine Displacement: ");
             vehicles.put(plateNumber, new Motorcycle(plateNumber, model, ratePerDay, engineDisplacement));
         } else {
@@ -62,8 +56,16 @@ public class RentalSystem {
             return;
         }
 
-        availablePlateNumbers.add(plateNumber);
         UserInterface.printFeedback("Vehicle added successfully!");
+    }
+
+    public static void viewAllVehicles() {
+        if (vehicles.isEmpty()) {
+            UserInterface.displayEmptyMessage();
+            return;
+        }
+
+        UserInterface.displayVehicleTable(vehicles);
     }
 
     public static void rentVehicle() {
@@ -71,24 +73,20 @@ public class RentalSystem {
             UserInterface.displayEmptyMessage();
             return;
         }
-        
-        if (availablePlateNumbers.isEmpty()) {
-            UserInterface.displayNoAvailableMessage();
-            return;
-        }
 
-        String plateNumber = searchPlateNumber();
-        if (plateNumber == null) {
+        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Rent: ", true, vehicles);
+        boolean isAvailable = vehicles.containsKey(plateNumber) && vehicles.get(plateNumber).getAvailability();
+
+        if (!isAvailable) {
+            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " is not available for rent.");
             return;
         }
 
         int numberOfDays = InputValidation.inputPositiveInteger("Enter Number of Days to Rent: ");
         double rentalCost = vehicles.get(plateNumber).rentalCost(numberOfDays);
-        UserInterface.printFeedback(("Successfully Rented Vehicle! Rental Cost: P" + String.format("%.2f", rentalCost)));
         
-        availablePlateNumbers.remove(plateNumber);
-        rentedPlateNumbers.add(plateNumber);
-        vehicles.get(plateNumber).setStatus(false);
+        UserInterface.printFeedback(String.format("Rental Cost for %d days: P%.2f\nSuccessfully Rented Vehicle!", numberOfDays, rentalCost));
+        vehicles.get(plateNumber).setAvailability(false);
     }
 
     public static void returnVehicle() {
@@ -96,57 +94,16 @@ public class RentalSystem {
             UserInterface.displayEmptyMessage();
             return;
         }
-        
-        if (rentedPlateNumbers.isEmpty()) {
-            UserInterface.printFeedback("Error! No Rented Vehicles Found! All Vehicles Are Available.");
-            return;
-        }
 
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Return: ");
-        boolean found = rentedPlateNumbers.contains(plateNumber);
+        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Return: ", true, vehicles);
+        boolean isRented = vehicles.containsKey(plateNumber) && !vehicles.get(plateNumber).getAvailability();
 
-        if (!vehicles.containsKey(plateNumber)) {
-            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " does not exist.");
-            return;
-        }
-
-        if (!found) {
+        if (!isRented) {
             UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " is not currently rented.");
             return;
         }
 
-        availablePlateNumbers.add(plateNumber);
-        rentedPlateNumbers.remove(plateNumber);
-        
-        vehicles.get(plateNumber).setStatus(true);
+        vehicles.get(plateNumber).setAvailability(true);
         UserInterface.printFeedback("Successfully Returned Vehicle!");
-    }
-
-    // Helper method to search for a vehicle by plate number and check if it's available for rent
-    public static String searchPlateNumber() { 
-        if (availablePlateNumbers.isEmpty()) {
-            UserInterface.displayNoAvailableMessage();
-            return null;
-        }
-
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ");
-        boolean found = availablePlateNumbers.contains(plateNumber);
-
-        if (!vehicles.containsKey(plateNumber)) {
-            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " does not exist.");
-            return null;
-        }
-
-        if (!found) {
-            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " is not available.");
-            return null;
-        }
-
-        return plateNumber;
-    }
-
-    // Helper method for other classes (inside package) to access the vehicles list
-    protected static HashMap<String, Vehicle> getVehiclesList() {
-        return vehicles;
     }
 }
