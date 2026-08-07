@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class RentalSystem { 
     private static final HashMap<String, Vehicle> vehicles = new HashMap<>();
 
-    protected static void start() {
+    protected static void startProgram() {
         UserInterface.printTitle("VEHICLE RENTAL SYSTEM");
         boolean running = true;
         
@@ -39,25 +39,25 @@ public class RentalSystem {
         };
 
         UserInterface.printTitle("ADD A " + vehicleType);
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ", false, vehicles);
+        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ", vehicleType, vehicles);
         String model = InputValidation.inputModel("Enter Model: ");
         double ratePerDay = InputValidation.inputRatePerDay("Enter Base Rate Per Day: ");
 
         if (vehicleType == VehicleType.CAR) {
-            int numSeats = InputValidation.inputPositiveInteger("Enter Number of Seats: ");
+            int numSeats = InputValidation.inputDetails("Enter Number of Seats: ", vehicleType);
             vehicles.put(plateNumber, new Car(plateNumber, model, ratePerDay, numSeats));
         } else if (vehicleType == VehicleType.VAN) {
-            int cargoCapacity = InputValidation.inputPositiveInteger("Enter Cargo Capacity: ");
+            int cargoCapacity = InputValidation.inputDetails("Enter Cargo Capacity: ", vehicleType);
             vehicles.put(plateNumber, new Van(plateNumber, model, ratePerDay, cargoCapacity));
         } else if (vehicleType == VehicleType.MOTORCYCLE) {
-            int engineDisplacement = InputValidation.inputPositiveInteger("Enter Engine Displacement: ");
+            int engineDisplacement = InputValidation.inputDetails("Enter Engine Displacement: ", vehicleType);
             vehicles.put(plateNumber, new Motorcycle(plateNumber, model, ratePerDay, engineDisplacement));
         } else {
             UserInterface.printFeedback("Invalid Vehicle Type! Please try again.");
             return;
         }
 
-        UserInterface.printFeedback("Vehicle added successfully!");
+        UserInterface.printFeedback("Vehicle Added Successfully!");
     }
 
     public static void viewAllVehicles() {
@@ -75,13 +75,13 @@ public class RentalSystem {
             return;
         }
 
-        if (vehicles.values().stream().anyMatch(Vehicle::getAvailability)) {
+        if (!vehicles.values().stream().anyMatch(Vehicle::getAvailability)) {
             UserInterface.displayNoAvailableMessage();
             return;
         }
 
         UserInterface.printTitle("RENT A VEHICLE");
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Rent: ", true, vehicles);
+        String plateNumber = InputValidation.findPlateNumber("Enter Plate Number to Rent: ", vehicles);
         boolean isAvailable = vehicles.containsKey(plateNumber) && vehicles.get(plateNumber).getAvailability();
 
         if (!isAvailable) {
@@ -90,7 +90,7 @@ public class RentalSystem {
         }
 
         int numberOfDays = InputValidation.inputPositiveInteger("Enter Number of Days to Rent: ");
-        double rentalCost = vehicles.get(plateNumber).rentalCost(numberOfDays);
+        double rentalCost = vehicles.get(plateNumber).getRentalCost(numberOfDays);
         
         UserInterface.printFeedback(String.format("Rental Cost for %d days: P%.2f\nSuccessfully Rented Vehicle!", numberOfDays, rentalCost));
         vehicles.get(plateNumber).setAvailability(false);
@@ -108,7 +108,7 @@ public class RentalSystem {
         }
 
         UserInterface.printTitle("RETURN A VEHICLE");
-        String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Return: ", true, vehicles);
+        String plateNumber = InputValidation.findPlateNumber("Enter Plate Number to Return: ", vehicles);
         boolean isRented = vehicles.containsKey(plateNumber) && !vehicles.get(plateNumber).getAvailability();
 
         if (!isRented) {
