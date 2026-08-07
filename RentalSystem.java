@@ -38,6 +38,7 @@ public class RentalSystem {
             default -> null; // This case should never happen due to input validation
         };
 
+        UserInterface.printTitle("ADD A " + vehicleType);
         String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number: ", false, vehicles);
         String model = InputValidation.inputModel("Enter Model: ");
         double ratePerDay = InputValidation.inputRatePerDay("Enter Base Rate Per Day: ");
@@ -74,11 +75,17 @@ public class RentalSystem {
             return;
         }
 
+        if (vehicles.values().stream().anyMatch(Vehicle::getAvailability)) {
+            UserInterface.displayNoAvailableMessage();
+            return;
+        }
+
+        UserInterface.printTitle("RENT A VEHICLE");
         String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Rent: ", true, vehicles);
         boolean isAvailable = vehicles.containsKey(plateNumber) && vehicles.get(plateNumber).getAvailability();
 
         if (!isAvailable) {
-            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " is not available for rent.");
+            UserInterface.printFeedback("Error! Vehicle Not Available! Please Try Again.");
             return;
         }
 
@@ -95,11 +102,17 @@ public class RentalSystem {
             return;
         }
 
+        if (vehicles.values().stream().noneMatch(vehicle -> !vehicle.getAvailability())) {
+            UserInterface.displayNoRentedMessage();
+            return;
+        }
+
+        UserInterface.printTitle("RETURN A VEHICLE");
         String plateNumber = InputValidation.inputPlateNumber("Enter Plate Number to Return: ", true, vehicles);
         boolean isRented = vehicles.containsKey(plateNumber) && !vehicles.get(plateNumber).getAvailability();
 
         if (!isRented) {
-            UserInterface.printFeedback("Error! Vehicle with Plate Number " + plateNumber + " is not currently rented.");
+            UserInterface.printFeedback("Error! Vehicle Not Rented! Please Try Again.");
             return;
         }
 

@@ -34,15 +34,15 @@ public class UserInterface {
     public static void displayVehicleTable(HashMap<String, Vehicle> vehicles) {
         int[] longestLengths = getLengthLineElements(vehicles);
 
-        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
+        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 26));
 
-        System.out.print("| PLATE NUMBER" + " ".repeat(longestLengths[0] - 12));
-        System.out.print("| TYPE" + " ".repeat(longestLengths[1] - 4));
-        System.out.print("| MODEL" + " ".repeat(longestLengths[2] - 5));
-        System.out.print("| BASE RATE" + " ".repeat(longestLengths[3] - 9));
-        System.out.println("| STATUS" + " ".repeat(longestLengths[4] - 6) + "|");
+        System.out.print("| PLATE NUMBER" + " ".repeat(longestLengths[0] - 9));
+        System.out.print("| TYPE" + " ".repeat(longestLengths[1] - 1));
+        System.out.print("| MODEL" + " ".repeat(longestLengths[2] - 2));
+        System.out.print("| BASE RATE" + " ".repeat(longestLengths[3] - 6));
+        System.out.println("| STATUS" + " ".repeat(longestLengths[4] - 3) + "|");
 
-        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
+        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 26));
 
         for (Vehicle vehicle : vehicles.values()) {
             String plateNumber = vehicle.getPlateNumber();
@@ -58,7 +58,7 @@ public class UserInterface {
             System.out.println("| " + status + " ".repeat(longestLengths[4] - status.length() + 3) + "|");
         }
 
-        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 19));
+        System.out.println("-".repeat(longestLengths[0] + longestLengths[1] + longestLengths[2] + longestLengths[3] + longestLengths[4] + 26));
     }
 
     protected static void displayEmptyMessage() {
@@ -67,6 +67,10 @@ public class UserInterface {
 
     protected static void displayNoAvailableMessage() {
         printFeedback("Error! No Available Vehicles Found! All Vehicles Are Rented.");
+    }
+
+    protected static void displayNoRentedMessage() {
+        printFeedback("Error! No Rented Vehicles Found! All Vehicles Are Available.");
     }
 
     // Helper method to get the length of the longest elements
